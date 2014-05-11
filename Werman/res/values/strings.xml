@@ -4,5 +4,7 @@
     <string name="app_name">Werman</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="werman_hint">Werman</string>
+    <string name="english_hint">English</string>
 
 </resources>
