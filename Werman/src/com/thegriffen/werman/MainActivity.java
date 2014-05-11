@@ -2,146 +2,65 @@ package com.thegriffen.werman;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.EditText;
 
 public class MainActivity extends Activity {
-	private boolean englishOnTop = true;
-	private boolean wermanDone = false, englishDone = false;
-	private boolean swapped = false;
+	private boolean mEnglishOnTop = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		Button switchLaunguage = (Button) findViewById(R.id.button1);
+		Button switchLaunguage = (Button) findViewById(R.id.switch_button);
 		switchLaunguage.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				TextView werman = (TextView) findViewById(R.id.editText2);
-				TextView english = (TextView) findViewById(R.id.editText1);
-				Animation wermanAnimation, englishAnimation;
-				if(englishOnTop) {
-					wermanAnimation = new TranslateAnimation(
-							Animation.RELATIVE_TO_SELF, 0.0f,
-							Animation.RELATIVE_TO_SELF, 0.0f,
-							Animation.RELATIVE_TO_SELF, 0.0f,
-							Animation.ABSOLUTE, (english.getTop() - werman.getTop()));
-					wermanAnimation.setDuration(500);
-					
-					englishAnimation = new TranslateAnimation(
-							Animation.RELATIVE_TO_SELF, 0.0f,
-							Animation.RELATIVE_TO_SELF, 0.0f,
-							Animation.RELATIVE_TO_SELF, 0.0f,
-							Animation.ABSOLUTE, (werman.getTop() - english.getTop()));
-					englishAnimation.setDuration(500);
+				EditText top = (EditText) findViewById(R.id.top_box);
+				EditText bottom = (EditText) findViewById(R.id.bottom_box);
+				String topText = top.getText().toString();
+				String bottomText = bottom.getText().toString();
+				top.setText(bottomText);
+				bottom.setText(topText);
+				if(mEnglishOnTop) {
+					top.setHint(R.string.werman_hint);
+					bottom.setHint(R.string.english_hint);
 				}
 				else {
-					wermanAnimation = new TranslateAnimation(
-							Animation.RELATIVE_TO_SELF, 0.0f,
-							Animation.RELATIVE_TO_SELF, 0.0f,
-							Animation.RELATIVE_TO_SELF, 0.0f,
-							Animation.ABSOLUTE, (werman.getTop() + english.getTop()));
-					wermanAnimation.setDuration(500);
-					
-					englishAnimation = new TranslateAnimation(
-							Animation.RELATIVE_TO_SELF, 0.0f,
-							Animation.RELATIVE_TO_SELF, 0.0f,
-							Animation.RELATIVE_TO_SELF, 0.0f,
-							Animation.ABSOLUTE, (werman.getTop() - english.getTop()));
-					englishAnimation.setDuration(500);
+					top.setHint(R.string.english_hint);
+					bottom.setHint(R.string.werman_hint);
 				}
+				mEnglishOnTop = !mEnglishOnTop;
+			}
+		});
+		
+		EditText inputText = (EditText) findViewById(R.id.top_box);
+		inputText.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
 				
-				werman.startAnimation(wermanAnimation);
-				english.startAnimation(englishAnimation);
-				englishAnimation.setAnimationListener(new AnimationListener() {
-					
-					@Override
-					public void onAnimationStart(Animation animation) {
-						// TODO Auto-generated method stub
-						swapped = false;
-						englishDone = false;
-					}
-					
-					@Override
-					public void onAnimationRepeat(Animation animation) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void onAnimationEnd(Animation animation) {
-						englishDone = true;
-						TextView werman = (TextView) findViewById(R.id.editText2);
-						TextView english = (TextView) findViewById(R.id.editText1);
-						Button button = (Button) findViewById(R.id.button1);
-						LinearLayout parent = (LinearLayout) findViewById(R.id.LinearLayout1);
-						if(wermanDone && englishDone && !swapped) {
-							parent.removeAllViews();
-							if(englishOnTop) {
-								parent.addView(werman);
-								parent.addView(button);
-								parent.addView(english);
-							}
-							else {
-								parent.addView(english);
-								parent.addView(button);
-								parent.addView(werman);
-							}
-							swapped = true;
-							englishOnTop = !englishOnTop;
-						}
-					}
-				});
-				wermanAnimation.setAnimationListener(new AnimationListener() {
-					
-					@Override
-					public void onAnimationStart(Animation animation) {
-						// TODO Auto-generated method stub
-						swapped = false;
-						wermanDone = false;
-					}
-					
-					@Override
-					public void onAnimationRepeat(Animation animation) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void onAnimationEnd(Animation animation) {
-						// TODO Auto-generated method stub
-						wermanDone = true;
-						TextView werman = (TextView) findViewById(R.id.editText2);
-						TextView english = (TextView) findViewById(R.id.editText1);
-						Button button = (Button) findViewById(R.id.button1);
-						LinearLayout parent = (LinearLayout)findViewById(R.id.LinearLayout1);
-						if(wermanDone && englishDone && !swapped) {
-							parent.removeAllViews();
-							if(englishOnTop) {
-								parent.addView(werman);
-								parent.addView(button);
-								parent.addView(english);
-							}
-							else {
-								parent.addView(english);
-								parent.addView(button);
-								parent.addView(werman);
-							}
-							swapped = true;
-							englishOnTop = !englishOnTop;
-						}
-					}
-				});
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				EditText inputText = (EditText) findViewById(R.id.top_box);
+				translate(inputText.getText().toString(), inputText.getHint().toString());
 			}
 		});
 	}
@@ -149,8 +68,21 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+//		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	private void translate(String input, String launguage) {
+		if(launguage.equals(this.getString(R.string.english_hint))) {			
+			String translation = Werman.TranslateToWerman(input);
+			EditText bottom = (EditText) findViewById(R.id.bottom_box);
+			bottom.setText(translation);
+		}
+		else if(launguage.equals(this.getString(R.string.werman_hint))){
+			String translation = Werman.TranslateFromWerman(input);
+			EditText bottom = (EditText) findViewById(R.id.bottom_box);
+			bottom.setText(translation);
+		}
 	}
 
 }
