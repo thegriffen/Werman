@@ -17,7 +17,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		Werman.init();
 		Button switchLaunguage = (Button) findViewById(R.id.switch_button);
 		switchLaunguage.setOnClickListener(new OnClickListener() {
 
@@ -37,6 +37,7 @@ public class MainActivity extends Activity {
 					top.setHint(R.string.english_hint);
 					bottom.setHint(R.string.werman_hint);
 				}
+				translate(top.getText().toString(), top.getHint().toString());
 				mEnglishOnTop = !mEnglishOnTop;
 			}
 		});

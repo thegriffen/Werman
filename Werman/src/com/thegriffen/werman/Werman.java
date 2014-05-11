@@ -1,43 +1,47 @@
 package com.thegriffen.werman;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Werman {
 	
-	private static String[][] key = new String[][] {
-			{"kkk", "robotics"},
-			{"robotics", "nazi people", "nazi", "people"},
-			{"griffen", "the master", "the", "master"},
-			{"shawn", "jackson"},
-			{"girl", "curvy"},
-			{"girls", "Bjerg"},
-			{"food", "McLovin\'"},
-			{"drink", "Pepsi"},
-			{"harrison", "dirty casual", "dirty", "casual"},
-			{"seth", "flaminaFace"},
-			{"connie", "ConMan"}, //TODO: make random
-			{"logan", "lady killer", "lady", "killer"},
-			{"lydia", "lydiot <3", "lydiot", "<3"},
-			{"jackson", "Shawnish"},
-			{"dance_mode", "Boom Boom dance dance!", "Boom", "Boom", "dance", "dance!"},
-			{"system.exit", "I think not! (never ending recursive loop goes here)", "I", "think", "not!", "(never", "ending", "recursive", "loop", "goes", "here)"},
-			{"carly", "Carlo"},
-			{"carlo", "Carlos"},
-			{"is", "isn\'t"},
-			{"er", "ei"},
-			{"g", "W"},
-			{"b", "Vladimir"},
-			{"m", "gurl please", "gurl", "please"},
-			{"s", "Lanaster"},
-			{"v", "FLAIRBROTHER"},
-			{"1", "nullpointerexception42 (there were 41 other ones);", "nullpointerexception42", "(there", "were", "41", "other", "ones);"},
-			{"2", "3"},
-			{"3", "2"},
-			{"5", "80"},
-			{"6", "42"},
-			{"7", "11"},
-			{"69", "439"}
-	};
+	private static List<TranslatePair> pairs = new ArrayList<TranslatePair>();
+	
+	public static void init() {
+		pairs.add(new TranslatePair("kkk", "robotics"));
+		pairs.add(new TranslatePair("robotics", "nazi people"));
+		pairs.add(new TranslatePair("griffen", "the master"));
+		pairs.add(new TranslatePair("shawn", "jackson"));
+		pairs.add(new TranslatePair("girl", "curvy"));
+		pairs.add(new TranslatePair("girls", "Bjerg"));
+		pairs.add(new TranslatePair("food", "McLovin\'"));
+		pairs.add(new TranslatePair("drink", "Pepsi"));
+		pairs.add(new TranslatePair("harrison", "dirty casual"));
+		pairs.add(new TranslatePair("seth", "flaminaFace"));
+		pairs.add(new TranslatePair("connie", "ConMan")); //TODO make random
+		pairs.add(new TranslatePair("logan", "lady killer"));
+		pairs.add(new TranslatePair("lydia", "lydiot <3"));
+		pairs.add(new TranslatePair("jackson", "Shawnish"));
+		pairs.add(new TranslatePair("dance_mode", "Boom Boom dance dance!"));
+		pairs.add(new TranslatePair("system.exit", "I think not! (never ending recursive loop goes here)"));
+		pairs.add(new TranslatePair("carly", "Carlo"));
+		pairs.add(new TranslatePair("carlo", "Carlos"));
+		pairs.add(new TranslatePair("is", "isn\'t"));
+		pairs.add(new TranslatePair("er", "ei"));
+		pairs.add(new TranslatePair("g", "W"));
+		pairs.add(new TranslatePair("b", "Vladimir"));
+		pairs.add(new TranslatePair("m", "gurl please"));
+		pairs.add(new TranslatePair("s", "Lanaster"));
+		pairs.add(new TranslatePair("v", "FLAIRBROTHER"));
+		pairs.add(new TranslatePair("1", "nullpointerexception42 (there were 41 other ones);"));
+		pairs.add(new TranslatePair("2", "3"));
+		pairs.add(new TranslatePair("3", "2"));
+		pairs.add(new TranslatePair("5", "80"));
+		pairs.add(new TranslatePair("6", "42"));
+		pairs.add(new TranslatePair("7", "11"));
+		pairs.add(new TranslatePair("69", "439"));
+	}
 
 	public static String TranslateToWerman(String s) {
 		Scanner scan = new Scanner(s);
@@ -45,9 +49,9 @@ public class Werman {
 		while(scan.hasNext()) {
 			String nextWord = scan.next();
 			boolean match = false;
-			for(String[] pair : key){
-				if(nextWord.equalsIgnoreCase(pair[0])) {
-					result += pair[1] + " ";
+			for(TranslatePair pair : pairs){
+				if(nextWord.equalsIgnoreCase(pair.getPair()[0])) {
+					result += pair.getPair()[1] + " ";
 					match = true;
 					break;
 				}
@@ -62,11 +66,6 @@ public class Werman {
 	}
 	
 	public static String TranslateFromWerman(String s) {
-		for(int i = 0; i < key.length / 2; i++) {
-		    String[] temp = key[i];
-		    key[i] = key[key.length - i - 1];
-		    key[key.length - i - 1] = temp;
-		}
 		Scanner scan2 = new Scanner(s);
 		String translation = "";
 		boolean hasSpace = false;
@@ -76,14 +75,14 @@ public class Werman {
 			boolean match = false;
 			boolean failed = false;
 			done = false;
-			for(String[] pair : key) {
-				if(pair.length > 2) {
+			for(TranslatePair pair : pairs) {
+				if(pair.getPair().length > 2) {
 					String lastWord = "";
-					for(int i = 2; i < pair.length; i++) {
+					for(int i = 2; i < pair.getPair().length; i++) {
 //						System.out.println(nextWord + "|" + pair[i]);
-						if(nextWord.equalsIgnoreCase(pair[i])) {
+						if(nextWord.equalsIgnoreCase(pair.getPair()[i])) {
 							lastWord = nextWord;
-							if(scan2.hasNext() && i < pair.length - 1) {
+							if(scan2.hasNext() && i < pair.getPair().length - 1) {
 								nextWord = scan2.next();
 							}
 							else {
@@ -103,7 +102,7 @@ public class Werman {
 						}
 					}
 					if(hasSpace) {
-						translation += pair[0] + " ";
+						translation += pair.getPair()[0] + " ";
 //						System.out.println("Translation: " + translation);
 						match = true;
 						hasSpace = false;
@@ -114,8 +113,8 @@ public class Werman {
 					}
 					
 				}
-				else if(nextWord.equalsIgnoreCase(pair[1])) {
-					translation += pair[0] + " ";
+				else if(nextWord.equalsIgnoreCase(pair.getPair()[1])) {
+					translation += pair.getPair()[0] + " ";
 //					System.out.println("Translation2: " + translation);
 					match = true;
 					break;
