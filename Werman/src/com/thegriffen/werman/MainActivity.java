@@ -18,6 +18,10 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		Werman.init();
+		boolean jacksonIsDumb = false;
+		do {
+			jacksonIsDumb = true;
+		} while(!jacksonIsDumb);
 		Button switchLaunguage = (Button) findViewById(R.id.switch_button);
 		switchLaunguage.setOnClickListener(new OnClickListener() {
 

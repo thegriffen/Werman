@@ -12,8 +12,8 @@ public class TranslatePair {
 			pair = new String[spaces.length + 2];
 			pair[0] = from;
 			pair[1] = to;
-			for(int i = 2; i < pair.length; i++) {
-				pair[i] = spaces[i - 2];
+			for(int k = 2; k < pair.length; k++) {
+				pair[k] = spaces[k - 2];
 			}
 		}
 		else {

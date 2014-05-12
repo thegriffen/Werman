@@ -28,6 +28,8 @@ public class Werman {
 		pairs.add(new TranslatePair("carly", "Carlo"));
 		pairs.add(new TranslatePair("carlo", "Carlos"));
 		pairs.add(new TranslatePair("is", "isn\'t"));
+		pairs.add(new TranslatePair("con", "pro"));
+		pairs.add(new TranslatePair("pro", "con"));
 		pairs.add(new TranslatePair("er", "ei"));
 		pairs.add(new TranslatePair("g", "W"));
 		pairs.add(new TranslatePair("b", "Vladimir"));
@@ -78,11 +80,11 @@ public class Werman {
 			for(TranslatePair pair : pairs) {
 				if(pair.getPair().length > 2) {
 					String lastWord = "";
-					for(int i = 2; i < pair.getPair().length; i++) {
+					for(int k = 2; k < pair.getPair().length; k++) {
 //						System.out.println(nextWord + "|" + pair[i]);
-						if(nextWord.equalsIgnoreCase(pair.getPair()[i])) {
+						if(nextWord.equalsIgnoreCase(pair.getPair()[k])) {
 							lastWord = nextWord;
-							if(scan2.hasNext() && i < pair.getPair().length - 1) {
+							if(scan2.hasNext() && k < pair.getPair().length - 1) {
 								nextWord = scan2.next();
 							}
 							else {
