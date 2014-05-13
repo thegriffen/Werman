@@ -2,11 +2,15 @@ package com.thegriffen.werman;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Werman {
 	
 	private static List<TranslatePair> pairs = new ArrayList<TranslatePair>();
+	private static String[] connieNames = new String[] {
+		"ConMan", "Khan", "Con Con The Wang!", "Con Con", "Conneh", "Khaaaaaaaann", "ShiCON", "EmotiCON"
+	};
 	
 	public static void init() {
 		pairs.add(new TranslatePair("kkk", "robotics"));
@@ -53,7 +57,14 @@ public class Werman {
 			boolean match = false;
 			for(TranslatePair pair : pairs){
 				if(nextWord.equalsIgnoreCase(pair.getPair()[0])) {
-					result += pair.getPair()[1] + " ";
+					if(pair.getPair()[0].equals("connie")) {
+						Random randGen = new Random();
+						int randNum = randGen.nextInt(connieNames.length);
+						result += connieNames[randNum] + " ";
+					}
+					else {
+						result += pair.getPair()[1] + " ";
+					}
 					match = true;
 					break;
 				}
@@ -68,6 +79,14 @@ public class Werman {
 	}
 	
 	public static String TranslateFromWerman(String s) {
+		for(String connie : connieNames) {
+			System.out.println("HI: " + connie);
+			if(s.toLowerCase().contains(connie.toLowerCase())) {
+				System.out.println("Contained " + connie);
+				s = s.toLowerCase().replace(connie.toLowerCase(), "connie");
+				break;
+			}
+		}
 		Scanner scan2 = new Scanner(s);
 		String translation = "";
 		boolean hasSpace = false;
@@ -77,49 +96,51 @@ public class Werman {
 			boolean match = false;
 			boolean failed = false;
 			done = false;
-			for(TranslatePair pair : pairs) {
-				if(pair.getPair().length > 2) {
-					String lastWord = "";
-					for(int k = 2; k < pair.getPair().length; k++) {
-//						System.out.println(nextWord + "|" + pair[i]);
-						if(nextWord.equalsIgnoreCase(pair.getPair()[k])) {
-							lastWord = nextWord;
-							if(scan2.hasNext() && k < pair.getPair().length - 1) {
-								nextWord = scan2.next();
+			if(!match) {
+				for(TranslatePair pair : pairs) {
+					if(pair.getPair().length > 2) {
+						String lastWord = "";
+						for(int k = 2; k < pair.getPair().length; k++) {
+	//						System.out.println(nextWord + "|" + pair[i]);
+							if(nextWord.equalsIgnoreCase(pair.getPair()[k])) {
+								lastWord = nextWord;
+								if(scan2.hasNext() && k < pair.getPair().length - 1) {
+									nextWord = scan2.next();
+								}
+								else {
+									done = true;
+								}
+								hasSpace = true;
 							}
 							else {
-								done = true;
+								if(hasSpace) {
+									translation += lastWord + " " + nextWord + " ";
+	//								System.out.println("ADDED1: " + lastWord + nextWord);
+									failed = true;
+								}
+								hasSpace = false;
+								match = false;
+								break;
 							}
-							hasSpace = true;
 						}
-						else {
-							if(hasSpace) {
-								translation += lastWord + " " + nextWord + " ";
-//								System.out.println("ADDED1: " + lastWord + nextWord);
-								failed = true;
-							}
+						if(hasSpace) {
+							translation += pair.getPair()[0] + " ";
+	//						System.out.println("Translation: " + translation);
+							match = true;
 							hasSpace = false;
-							match = false;
+						}
+						
+						if(done || failed) {
 							break;
 						}
+						
 					}
-					if(hasSpace) {
+					else if(nextWord.equalsIgnoreCase(pair.getPair()[1])) {
 						translation += pair.getPair()[0] + " ";
-//						System.out.println("Translation: " + translation);
+	//					System.out.println("Translation2: " + translation);
 						match = true;
-						hasSpace = false;
-					}
-					
-					if(done || failed) {
 						break;
 					}
-					
-				}
-				else if(nextWord.equalsIgnoreCase(pair.getPair()[1])) {
-					translation += pair.getPair()[0] + " ";
-//					System.out.println("Translation2: " + translation);
-					match = true;
-					break;
 				}
 			}
 			if(!match && !failed) {
